@@ -10,6 +10,7 @@ import TestScreen from "../screens/TestScreen/TestScreen";
 
 // Searchbar
 import { SearchBar } from '@rneui/themed';
+import HomeScreenNormal from "../screens/HomeScreen/HomeScreenNormal";
 
 const Tab = createBottomTabNavigator();
 
@@ -30,7 +31,7 @@ const BottomNavigator: React.FC = () => {
     <Tab.Navigator>
       <Tab.Screen
         name="Home"
-        component={HomeScreenEmpty}
+        component={HomeScreenNormal}
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon name="Home24Filled" color={focused ? "#1868F1" : "gray"} />
@@ -54,6 +55,26 @@ const BottomNavigator: React.FC = () => {
               {/* End of encapsulation */}
             </SafeAreaView>
           )
+        }}
+      />
+      <Tab.Screen
+        name="Files"
+        component={HomeScreenEmpty}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Icon name="Folder24Filled" color={focused ? "#1868F1" : "gray"} />
+          ),
+          tabBarActiveTintColor: "#1868F1",
+        }}
+      />
+      <Tab.Screen
+        name="Server"
+        component={TestScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Icon name="Server24Filled" color={focused ? "#1868F1" : "gray"} />
+          ),
+          tabBarActiveTintColor: "#1868F1",
         }}
       />
       <Tab.Screen
