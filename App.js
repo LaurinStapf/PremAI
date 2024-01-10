@@ -1,10 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { AppSplashScreen } from './screens/loadingScreens/SplashScreen/AppSplashScreen';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up Laurin to start working on your app!</Text>
+      <AppSplashScreen/>
       <StatusBar style="auto" />
     </View>
   );
@@ -18,4 +19,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
