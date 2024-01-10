@@ -1,11 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { AppSplashScreen } from './screens/loadingScreens/SplashScreen/AppSplashScreen';
+import React, { useState } from 'react';
 
 export default function App() {
+  const [isLoadingComplete, setLoadingComplete] = useState(false);
+
+  if (!isLoadingComplete) {
+    return (
+      <AppSplashScreen onLoadingComplete={() => setLoadingComplete(true)} />
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <AppSplashScreen/>
+      <Text>Open up App.js to start working on your app!</Text>
       <StatusBar style="auto" />
     </View>
   );
