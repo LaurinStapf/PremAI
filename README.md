@@ -4,8 +4,8 @@
 
 ## Contact
 
-|Name|Verantwortlich für|Kontakt|
-|--|--|--|
+|Name|Responsible for|Contact|
+|--|:--:|--|
 |Laurin S.|*|[stapf_laurin@outlook.de](mailto:stapf_laurin@outlook.de)
 |Elias S.|*|[sommer_elias@outlook.de](mailto:sommer_elias@outlook.de)
 
