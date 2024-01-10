@@ -1,49 +1,108 @@
 import React from 'react';
-import { TouchableOpacity, Text, Pressable } from 'react-native';
-import { Add12Regular } from "@fluentui/react-native-icons";
+import { Text, StyleSheet, Pressable, View } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome'; // Importieren Sie Ihre bevorzugte Icon-Bibliothek
+import * as Icons from '@fluentui/react-native-icons';
 
-const Button = ({ style, color, icon, size, text, onPress }) => {
-  let buttonStyle;
-  let textStyle;
-  let iconStyle;
+export default function Button(props) {
+  const {
+    onPress,
+    width = 370,
+    title = 'Save',
+    size = 'medium',
+    design = 'primary',
+    iconName = '' // Icon-Name als String
+  } = props;
 
-  // Set button style
-  if (style === 'filled') {
-    buttonStyle = {
-      backgroundColor: color,
-      padding: 10,
-      borderRadius: 5,
-    };
-    textStyle = {
-      color: 'white',
-      fontSize: size,
-    };
-  } else if (style === 'outline') {
-    buttonStyle = {
-      borderColor: color,
-      borderWidth: 1,
-      padding: 10,
-      borderRadius: 5,
-    };
-    textStyle = {
-      color: color,
-      fontSize: size,
-    };
-  }
+  // Dynamische Stilfunktionen
+  const getButtonStyle = () => {
+    switch (size) {
+      case 'large':
+        return { ...styles.big, width: width };
+      case 'medium':
+      default:
+        return { ...styles.medium, width: width };
+    }
+  };
 
-  // Set icon style
-  if (icon) {
-    iconStyle = {
-      marginRight: 5,
-    };
-  }
+  const getTextColor = () => {
+    switch (design) {
+      case 'secondary':
+        return '#1868F1';
+      case 'tertiary':
+        return '#1868F1';
+      default:
+        return 'white';
+    }
+  };
+
+  const getDesignStyle = () => {
+    switch (design) {
+      case 'secondary':
+        return styles.outline;
+      case 'tertiary':
+        return styles.textOnlyDesign;
+      case 'primary':
+      default:
+        return {};
+    }
+  };
+
+  // Icon-Rendering-Funktion
+  const renderIcon = () => {
+    if (!iconName) return null;
+    
+    const IconComponent = Icons[iconName]; // Zugriff auf das spezifische Icon
+    if (!IconComponent) return null; // Falls kein Icon gefunden wird
+
+    const iconColor = getTextColor();
+    return (
+      <IconComponent size={20} color={iconColor} style={styles.icon} />
+    );
+  };
+
+  const textStyle = {
+    ...styles.text,
+    color: getTextColor(),
+    marginLeft: iconName ? 8 : 0,
+  };
 
   return (
-    <Pressable style={buttonStyle} onPress={onPress}>
-      {icon && <Ionicons name={icon} size={size} color={color} style={iconStyle} />}
-      <Text style={textStyle}>{text}</Text>
+    <Pressable style={[styles.button, getButtonStyle(), getDesignStyle()]} onPress={onPress}>
+      {renderIcon()}
+      <Text style={textStyle}>{title}</Text>
     </Pressable>
   );
-};
+}
 
-export default Button;
+const styles = StyleSheet.create({
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    display: 'flex',
+    borderRadius: 8,
+    padding: 8,
+  },
+  medium: {
+    height: 40,
+    backgroundColor: '#1868F1',
+  },
+  big: {
+    height: 52,
+    backgroundColor: '#1868F1',
+  },
+  text: {
+    fontSize: 13,
+  },
+  icon: {
+    gap: 8, // Abstand zwischen Icon und Text
+  },
+  outline: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: '#1868F1',
+  },
+  textOnlyDesign: {
+    backgroundColor: 'transparent',
+  },
+});
