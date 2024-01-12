@@ -1,22 +1,26 @@
 import React from 'react';
-import { Text, StyleSheet, Pressable, View, Dimensions } from 'react-native';
+import { Text, StyleSheet, Pressable, View, Dimensions, Vibration, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Importieren Sie Ihre bevorzugte Icon-Bibliothek
 import * as Icons from '@fluentui/react-native-icons';
+import * as Haptics from 'expo-haptics';
+import {TouchableRipple} from 'react-native-paper'
 
 const deviceWidth = Dimensions.get('window').width;
 
 export default function Button(props) {
   const {
     onPress,
+    onLongPress,
     title = 'Save',
     size = 'medium',
     design = 'primary',
-    iconName = '' // Icon-Name als String
+    iconName = '',  // Icon-Name als String
+    style = {},
   } = props;
 
   // Dynamische Stilfunktionen
   const getButtonStyle = () => {
-    let buttonWidth = deviceWidth - 40; // Subtract 20 units of margin from each side
+    let buttonWidth = deviceWidth - 80; // Subtract 20 units of margin from each side
     switch (size) {
       case 'large':
         return { ...styles.big, width: buttonWidth };
@@ -69,10 +73,12 @@ export default function Button(props) {
   };
 
   return (
-    <Pressable android_ripple={{ color: 'rgba(255, 255, 255, 0.3)' }} style={[styles.button, getButtonStyle(), getDesignStyle()]} onPress={onPress}>
-      {renderIcon()}
-      <Text style={textStyle}>{title}</Text>
-    </Pressable>
+      <TouchableRipple borderless={true} style={[ styles.button, getButtonStyle(), getDesignStyle(), style]} rippleColor="rgba(255, 255, 255, .32)" onPress={onPress} onLongPress={onLongPress}>
+        <>
+          {renderIcon()}
+          <Text style={textStyle}>{title}</Text>
+        </>
+      </TouchableRipple>
   );
 }
 
