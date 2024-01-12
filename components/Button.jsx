@@ -20,7 +20,7 @@ export default function Button(props) {
 
   // Dynamische Stilfunktionen
   const getButtonStyle = () => {
-    let buttonWidth = deviceWidth - 80; // Subtract 20 units of margin from each side
+    let buttonWidth = deviceWidth - 68; // Subtract 20 units of margin from each side
     switch (size) {
       case 'large':
         return { ...styles.big, width: buttonWidth };
@@ -62,7 +62,7 @@ export default function Button(props) {
 
     const iconColor = getTextColor();
     return (
-      <IconComponent size={20} color={iconColor} style={styles.icon} />
+      <IconComponent size={24} color={iconColor} style={styles.icon} />
     );
   };
 
