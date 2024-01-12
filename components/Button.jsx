@@ -1,12 +1,13 @@
 import React from 'react';
-import { Text, StyleSheet, Pressable, View } from 'react-native';
+import { Text, StyleSheet, Pressable, View, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Importieren Sie Ihre bevorzugte Icon-Bibliothek
 import * as Icons from '@fluentui/react-native-icons';
+
+const deviceWidth = Dimensions.get('window').width;
 
 export default function Button(props) {
   const {
     onPress,
-    width = 370,
     title = 'Save',
     size = 'medium',
     design = 'primary',
@@ -15,12 +16,13 @@ export default function Button(props) {
 
   // Dynamische Stilfunktionen
   const getButtonStyle = () => {
+    let buttonWidth = deviceWidth - 40; // Subtract 20 units of margin from each side
     switch (size) {
       case 'large':
-        return { ...styles.big, width: width };
+        return { ...styles.big, width: buttonWidth };
       case 'medium':
       default:
-        return { ...styles.medium, width: width };
+        return { ...styles.medium, width: buttonWidth };
     }
   };
 
@@ -67,7 +69,7 @@ export default function Button(props) {
   };
 
   return (
-    <Pressable style={[styles.button, getButtonStyle(), getDesignStyle()]} onPress={onPress}>
+    <Pressable android_ripple={{ color: 'rgba(255, 255, 255, 0.3)' }} style={[styles.button, getButtonStyle(), getDesignStyle()]} onPress={onPress}>
       {renderIcon()}
       <Text style={textStyle}>{title}</Text>
     </Pressable>

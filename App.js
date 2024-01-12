@@ -19,7 +19,7 @@ export default function App() {
       <StatusBar style="auto" />
       <Button
         title="This is a test"
-        iconName="Password20Filled"
+        iconName="ArrowClockwise20Regular"
         design="secondary"
         onPress={() => alert('Button pressed')} />
     </View>
