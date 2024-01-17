@@ -28,7 +28,7 @@ const Card = ({ size = 'small', iconName = null, iconSize = 24, iconColor = '#80
               {renderIcon()}
                 <View>
                   <Text style={styles.text}>{title}</Text>
-                  <Text style={styles.description}>{description}</Text>
+                  {description && <Text style={styles.description}>{description}</Text>}
                   {children}
                 </View>
             </View>

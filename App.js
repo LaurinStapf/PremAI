@@ -4,9 +4,7 @@ import { AppSplashScreen } from './screens/loadingScreens/SplashScreen/AppSplash
 import * as Haptics from 'expo-haptics';
 import React, { useState } from 'react';
 import Button from './components/Button';
-import Card from './components/Card/Card'
-import CardContent from './components/Card/CardContent';
-import CardTitle from './components/Card/CardTitle';
+import Card from './components/Card/Card';
 
 export default function App() {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
