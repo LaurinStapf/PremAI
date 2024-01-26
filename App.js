@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import Button from "./components/Button";
 import StackNavigator from "./navigation/StackNavigator";
 import TestScreen from "./screens/TestScreen/TestScreen";
-import TextInputField from "./components/InputFields/TextInputField";
+import InputField from "./components/InputFields/InputField";
 import Card from "./components/Card/Card";
 
 export default function App() {
@@ -30,7 +30,7 @@ export default function App() {
         onPress={() => alert("Button pressed")}
         onLongPress={() => {Platform.OS == 'android' ? Vibration.vibrate(1 * 40) : Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)} } />
         <Card iconName="Server24Regular" title="Servername XYZ" description="192.178.68.1"></Card>
-        <TextInputField placeholder="E-Mail" iconName="Password24Filled"/>
+        <InputField placeholder="E-Mail" iconName="Password24Filled"/>
     </View>
   );
 }
