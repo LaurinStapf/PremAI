@@ -1,25 +1,33 @@
 import React from 'react';
-import { Text, StyleSheet, Pressable, View, Dimensions, Vibration, Platform } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'; // Importieren Sie Ihre bevorzugte Icon-Bibliothek
+import { Text, StyleSheet, View, Dimensions } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome'; // Import your preferred icon library
 import * as Icons from '@fluentui/react-native-icons';
-import * as Haptics from 'expo-haptics';
-import {TouchableRipple} from 'react-native-paper'
+import { TouchableRipple } from 'react-native-paper';
 
 const deviceWidth = Dimensions.get('window').width;
 
-export default function Button(props) {
-  const {
-    onPress,
-    onLongPress,
-    title = 'Save',
-    size = 'medium',
-    design = 'primary',
-    iconName = '',  // Icon-Name als String
-    style = {},
-  } = props;
+// Define the type for the Button props
+type ButtonProps = {
+  onPress: () => void;
+  onLongPress?: () => void;
+  title?: string;
+  size?: 'small' | 'medium' | 'large';
+  design?: 'primary' | 'secondary' | 'tertiary';
+  iconName?: keyof typeof Icons;
+  style?: object; // You should replace 'object' with a more specific style type if possible
+};
 
-  // Dynamische Stilfunktionen
-  const getButtonStyle = () => {
+const Button: React.FC<ButtonProps> = ({
+  onPress,
+  onLongPress,
+  title = 'Save',
+  size = 'medium',
+  design = 'primary',
+  iconName = '',
+  style = {},
+}) => {
+  // Dynamic style functions
+  const getButtonStyle = (): object => { // Replace 'object' with a specific type for styles
     let buttonWidth = deviceWidth - 68; // Subtract 20 units of margin from each side
     switch (size) {
       case 'large':
@@ -30,7 +38,7 @@ export default function Button(props) {
     }
   };
 
-  const getTextColor = () => {
+  const getTextColor = (): string => {
     switch (design) {
       case 'secondary':
         return '#1868F1';
@@ -41,7 +49,7 @@ export default function Button(props) {
     }
   };
 
-  const getDesignStyle = () => {
+  const getDesignStyle = (): object => { // Replace 'object' with a specific type for styles
     switch (design) {
       case 'secondary':
         return styles.outline;
@@ -53,12 +61,12 @@ export default function Button(props) {
     }
   };
 
-  // Icon-Rendering-Funktion
+  // Icon rendering function
   const renderIcon = () => {
     if (!iconName) return null;
     
-    const IconComponent = Icons[iconName]; // Zugriff auf das spezifische Icon
-    if (!IconComponent) return null; // Falls kein Icon gefunden wird
+    const IconComponent = Icons[iconName]; // Access the specific icon
+    if (!IconComponent) return null; // If no icon is found
 
     const iconColor = getTextColor();
     return (
@@ -73,14 +81,15 @@ export default function Button(props) {
   };
 
   return (
-      <TouchableRipple borderless={true} style={[ styles.button, getButtonStyle(), getDesignStyle(), style]} rippleColor="rgba(255, 255, 255, .32)" onPress={onPress} onLongPress={onLongPress}>
-        <>
-          {renderIcon()}
-          <Text style={textStyle}>{title}</Text>
-        </>
-      </TouchableRipple>
+    <TouchableRipple borderless={true} style={[styles.button, getButtonStyle(), getDesignStyle(), style]} rippleColor="rgba(255, 255, 255, .32)" onPress={onPress} onLongPress={onLongPress}>
+      <>
+        {renderIcon()}
+        <Text style={textStyle}>{title}</Text>
+      </>
+    </TouchableRipple>
   );
-}
+};
+
 
 const styles = StyleSheet.create({
   button: {
@@ -114,3 +123,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 });
+
+export default Button;
