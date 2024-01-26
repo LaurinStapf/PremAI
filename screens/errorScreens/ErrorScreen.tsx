@@ -22,9 +22,8 @@ interface ErrorScreenProps {
 export function ErrorScreen({ errorMessage, errorCode, children }: ErrorScreenProps) {
   const [appIsReady, setAppIsReady] = useState<boolean>(false);
 
-
   const screenHeight = Dimensions.get('screen').height;
-
+  const defaultErrorMessage = 'Es sieht so aus als wäre ein Fehler aufgetreten! Bitte versuche es erneut';
 
   return (
     <View style={styles.container}>
@@ -33,7 +32,7 @@ export function ErrorScreen({ errorMessage, errorCode, children }: ErrorScreenPr
       </View>
       <View style={styles.textContainer}>
         <Text style={styles.errorText}>
-          {errorMessage}
+          {errorMessage || defaultErrorMessage}
         </Text>
         {/* <Text style={styles.errorCode}>
           Fehlercode: {errorCode}
