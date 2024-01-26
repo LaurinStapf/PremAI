@@ -28,20 +28,19 @@ const TextInputField: React.FC<TextInputProps> = ({
     if (!IconComponent) return null;
 
     return (
-      <View style={[styles.iconContainer]}>
-        <IconComponent size={iconSize} color={iconColor} />
-      </View>
+        <IconComponent size={24} color="#1868F1" />
     );
   };
 
   return (
-    <View style={styles.inputContainer}>
+    <View style={[styles.inputContainer, style]}>
     {renderIcon()}
       <TextInput
         style={styles.inputStyle}
+        placeholder={placeholder}
         // Include other TextInput props as needed
       />
-      <Text style={styles.labelStyle}>E-Mail</Text>
+      <Text style={styles.labelStyle}>{label}</Text>
     </View>
   );
 };
@@ -66,10 +65,11 @@ const styles = StyleSheet.create({
   },
   labelStyle: {
     position: 'absolute', // Position it absolutely so that it can be moved around freely
-    left: 0, // Align it with the left side of the container
+    left: 35, // Align it with the left side of the container
     top: -20, // Distance from the top of the container
     fontSize: 12, // Size of the label text
-    color: '#D1D1D1', // Color of the label text
+    color: '#D1D1D1',
+ // Color of the label text
     // Add any other styling you want for the label
   }
 });
