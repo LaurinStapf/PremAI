@@ -1,18 +1,18 @@
 import React from 'react';
-import { View, TextInput, StyleSheet, Text, Dimensions, ViewStyle } from 'react-native';
+import * as ReactN from 'react-native';
 import * as Icons from '@fluentui/react-native-icons';
 
-const screenWidth = Dimensions.get('window').width;
+const screenWidth = ReactN.Dimensions.get('window').width;
 
 interface TextInputProps {
   placeholder: string;
   label: string;
   iconName?: keyof typeof Icons; 
-  style?: ViewStyle;
+  style?: ReactN.ViewStyle;
   [key: string]: any;
 }
 
-const TextInputField: React.FC<TextInputProps> = ({ 
+const TextInput: React.FC<TextInputProps> = ({ 
   placeholder, 
   label, 
   iconName  = null,
@@ -24,7 +24,7 @@ const TextInputField: React.FC<TextInputProps> = ({
     if (!iconName) return null;
 
     // Type assertion to let TypeScript know that IconComponent is a valid React component
-    const IconComponent = Icons[iconName] as React.ComponentType<{ size: number; color: string; style?: ViewStyle }>;
+    const IconComponent = Icons[iconName] as React.ComponentType<{ size: number; color: string; style?: ReactN.ViewStyle }>;
     if (!IconComponent) return null;
 
     return (
@@ -33,19 +33,19 @@ const TextInputField: React.FC<TextInputProps> = ({
   };
 
   return (
-    <View style={[styles.inputContainer, style]}>
+    <ReactN.View style={[styles.inputContainer, style]}>
     {renderIcon()}
-      <TextInput
+      <ReactN.TextInput
         style={styles.inputStyle}
         placeholder={placeholder}
         // Include other TextInput props as needed
       />
-      <Text style={styles.labelStyle}>{label}</Text>
-    </View>
+      <ReactN.Text style={styles.labelStyle}>{label}</ReactN.Text>
+    </ReactN.View>
   );
 };
 
-const styles = StyleSheet.create({
+const styles = ReactN.StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -74,4 +74,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default TextInputField;
+export default TextInput;
