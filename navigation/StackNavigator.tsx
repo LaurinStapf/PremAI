@@ -6,9 +6,11 @@ import { NavigationContainer } from "@react-navigation/native";
 
 // Screens
 import TestScreen from "../screens/TestScreen/TestScreen";
+import SignInScreen from "../screens/SignInScreen/SignInScreen";
 
 // Types for Navigation
 export type RootStackParamList = {
+  SignIn: undefined;
   Test: undefined;
 };
 
@@ -18,6 +20,7 @@ const StackNavigator: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Test" component={TestScreen} />
       </Stack.Navigator>
     </NavigationContainer>

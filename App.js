@@ -3,9 +3,9 @@ import { StyleSheet, Text, Vibration, View, Platform } from "react-native";
 import { AppSplashScreen } from "./screens/loadingScreens/SplashScreen/AppSplashScreen";
 import * as Haptics from "expo-haptics";
 import React, { useState } from "react";
-import Button from "./components/Button";
 import StackNavigator from "./navigation/StackNavigator";
 import TestScreen from "./screens/TestScreen/TestScreen";
+import FontLoader from "./assets/fonts/FontLoader";
 
 export default function App() {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -16,7 +16,13 @@ export default function App() {
     );
   }
 
-  return <StackNavigator />;
+  // make it support multiple comps
+  return (
+    <FontLoader>
+    <StackNavigator >
+    </StackNavigator>
+    </FontLoader>
+  );
 }
 
 const styles = StyleSheet.create({
