@@ -9,6 +9,7 @@ import TestScreen from "./screens/TestScreen/TestScreen";
 import TextInput from "./components/InputFields/TextInput";
 import Card from "./components/Card/Card";
 import { ErrorScreen } from "./screens/errorScreens/ErrorScreen";
+import Tooltip from "./components/Tooltip/Tooltip";
 
 export default function App() {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -33,16 +34,12 @@ export default function App() {
     //     <Card iconName="Server24Regular" title="Servername XYZ" description="192.178.68.1"></Card>
     //     <TextInput placeholder="Password" label="Password" iconName="Password24Filled" style={{margin: 50}}/>
     // </View>
-      <ErrorScreen errorMessage="Es sieht so aus, als wäre ein Fehler aufgetreten. Bitte versuche es erneut!"> 
-        <Button 
-          style={{ margin: 20 }}
-          title="This is a test"
-          iconName="ErrorCircle24Regular"
-          design="primary"
-          onPress={() => alert("Button pressed")}
-          onLongPress={() => {Platform.OS == 'android' ? Vibration.vibrate(1 * 40) : Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)} }
-        />
-      </ErrorScreen>
+      <View style={styles.container}>
+        <Tooltip style={styles.container} content="Dies ist der Tooltip-Inhalt" type="top">
+          {/* <Card iconName="Server24Regular" title="Servername XYZ" description="192.178.68.1"></Card> */}
+          <Text>This is a test</Text>
+        </Tooltip>
+      </View>
   );
 }
 
