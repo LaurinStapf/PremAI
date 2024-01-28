@@ -19,7 +19,7 @@ export default function App() {
   // make it support multiple comps
   return (
     <FontLoader>
-    <StackNavigator >
+    <StackNavigator>
     </StackNavigator>
     </FontLoader>
   );
@@ -28,8 +28,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
