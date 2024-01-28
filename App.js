@@ -20,6 +20,7 @@ export default function App() {
   return (
     <FontLoader>
     <StackNavigator>
+      <TestScreen />
     </StackNavigator>
     </FontLoader>
   );

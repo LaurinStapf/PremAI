@@ -4,7 +4,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import CloudLogo from '../../../assets/CloudLogo.svg';
-import TextLogo from '../../../assets/TextLogo.svg';
+import TextLogo from '../../../components/Logos/TextLogo';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -52,7 +52,7 @@ export function AppSplashScreen({ onLoadingComplete }) {
       style={{ flex: 1, alignItems: 'center', justifyContent: 'center',}}
       onLayout={onLayoutRootView}>
       <CloudLogo/>
-      <TextLogo style={{top: (Platform.OS === 'ios') ? screenHeight * 0.32 : screenHeight * 0.30}}/>
+      <TextLogo/>
 
     </View>
   );
