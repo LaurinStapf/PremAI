@@ -5,6 +5,7 @@ import * as Haptics from "expo-haptics";
 import React, { useState } from "react";
 import StackNavigator from "./navigation/StackNavigator";
 import TestScreen from "./screens/TestScreen/TestScreen";
+import HomeScreen from "./screens/HomeScreen/HomeScreenEmpty";
 import FontLoader from "./assets/fonts/FontLoader";
 
 export default function App() {
@@ -20,7 +21,7 @@ export default function App() {
   return (
     <FontLoader>
     <StackNavigator>
-      <TestScreen />
+      <HomeScreen />
     </StackNavigator>
     </FontLoader>
   );
