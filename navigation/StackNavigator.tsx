@@ -9,10 +9,12 @@ import TestScreen from "../screens/TestScreen/TestScreen";
 import SignInScreen from "../screens/SignInScreen/SignInScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomeScreenEmpty from "../screens/HomeScreen/HomeScreenEmpty";
+import HomeScreenNormal from "../screens/HomeScreen/HomeScreenNormal";
 
 // Types for Navigation
 export type RootStackParamList = {
   HomeScreenEmpty: undefined;
+  HomeScreenNormal: undefined;
   SignIn: undefined;
   Test: undefined;
 };
@@ -28,9 +30,9 @@ const StackNavigator: React.FC = () => {
           <Stack.Screen name="SignIn" component={SignInScreen} options={{headerShown: false}} />    
         ) : (
           // ToDo: Add Bottom Tab Navigator here
-          <Stack.Screen name="Test" component={TestScreen} />
+          // <Stack.Screen name="Test" component={TestScreen} />
+          <Stack.Screen name="HomeScreenNormal" component={HomeScreenNormal} options={{ headerShown: false }}/>
         )}
-        <Stack.Screen name="HomeScreenEmpty" component={HomeScreenEmpty} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

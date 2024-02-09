@@ -1,8 +1,8 @@
 import React, { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
-import Welcome from '../../assets/welcome.svg';
-import Button from '../../components/Button';
+import Welcome from '../../../assets/welcome.svg';
+import Button from '../../../components/Buttons/Button';
 
 // create interface for props
 interface WelcomeBottomSheetProps {

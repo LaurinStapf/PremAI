@@ -7,7 +7,7 @@ import * as Font from 'expo-font';
 import CloudLogo from '../../assets/CloudLogo.svg'
 import TextLogo from '../../assets/TextLogo.svg';
 import ErrorLogo from '../../assets/error.svg';
-import Button from '../../components/Button';
+import Button from '../../components/Buttons/Button';
 import { ArrowClockwise24Regular } from "@fluentui/react-native-icons";
 
 // Keep the splash screen visible while we fetch resources

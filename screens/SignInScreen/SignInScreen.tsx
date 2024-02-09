@@ -8,7 +8,7 @@ import {
   Dimensions,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Button from "../../components/Button";
+import Button from "../../components/Buttons/Button";
 import AccountAvatar from "../../assets/account-avatar.svg";
 import AppleAuthButton from "../../components/Buttons/AppleAuthButton/AppleAuthButton";
 import GoogleAuthButton from "../../components/Buttons/GoogleAuthButton/GoogleAuthButton";
