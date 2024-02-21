@@ -1,11 +1,14 @@
 // FontLoader.tsx
 import React from "react";
 import { View, ActivityIndicator } from "react-native";
-import { useFonts, Roboto_400Regular } from "@expo-google-fonts/roboto";
+import { useFonts } from "expo-font"
+import { Roboto_400Regular } from "@expo-google-fonts/roboto";
+import { Lato_900Black } from "@expo-google-fonts/lato";
 
 const FontLoader: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   let [fontsLoaded] = useFonts({
     Roboto_400Regular,
+    Lato_900Black,
     // Andere Schriftarten können hier hinzugefügt werden
   });
 
