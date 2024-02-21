@@ -58,18 +58,24 @@ const HomeScreenNormal = () => {
         }
 
         const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsMultipleSelection: true,
+            allowsEditing: false,
             quality: 1,
         });
 
-        if (!result.canceled) {
-            const {uri} = result.assets[0];
-            setUploading(true);
-            await uploadFile(uri, "test.jpg");
-            setUploading(false);
-        }
+        try {
+            if (!result.canceled && result.assets) {
+                setUploading(true);
+        
+                for (const asset of result.assets) {
+                    const { uri, fileName } = asset;
+                    await uploadFile(uri, fileName);
+                }
+        
+                setUploading(false);
+            }
+        } catch (error) {console.error('Fehler beim Hochladen der Datei:', error);}
     };
 
     const showPickerOptions = () => {
