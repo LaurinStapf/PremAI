@@ -9,11 +9,15 @@ import { useNavigation } from '@react-navigation/native';
 import TestScreen from '../screens/TestScreen/TestScreen';
 import SignInScreen from '../screens/SignInScreen/SignInScreen';
 
+// Bottom Navigator
+import BottomNavigator from './BottomNavigator';
+
 // Types for Navigation
 export type RootStackParamList = {
   AuthLoading: undefined;
   Test: undefined;
   SignIn: undefined;
+  BottomNavigator: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -42,9 +46,9 @@ const StackNavigator: React.FC = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={isSignedIn ? 'Test' : 'SignIn'}>
+      <Stack.Navigator initialRouteName={isSignedIn ? 'BottomNavigator' : 'SignIn'}>
         <Stack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false, gestureEnabled: false }} />
-        <Stack.Screen name="Test" component={TestScreen} options={{gestureEnabled: false, headerLeft: () => null}} />
+        <Stack.Screen name="BottomNavigator" component={BottomNavigator} options={{ headerShown: false }} />
         {/* Weitere Screens */}
       </Stack.Navigator>
     </NavigationContainer>
