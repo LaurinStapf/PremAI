@@ -38,32 +38,28 @@ const Divider = (props: any) => {
 };
 
 const SignInScreen: React.FC = () => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<SignInScreenNavigationProp>();
 
   // Properties
   const [email, setEmail] = useState("elias.unity@gmail.com");
   const [password, setPassword] = useState("1234");
 
-  const onSignInPress = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential: UserCredential) => {
-        await AsyncStorage.setItem("userToken", userCredential.user.uid);
-
-        userCredential.user
-          .getIdToken()
-          .then(async (token: string) => {
-            await AsyncStorage.setItem("userToken", token);
-          })
-          .catch((error) => {
-            alert(error);
-          });
-
-        navigation.navigate("Test");
-      })
-      .catch((error) => {
-        alert(error);
-      });
+  const onSignInPress = async () => {
+    try {
+      const userCredential: UserCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      console.log(user);
+      await AsyncStorage.setItem("userToken", user?.uid);
+      navigation.navigate("Test");
+    } catch (error) {
+      console.log(error);
+    }
   };
+  
 
   return (
     <View style={styles.container}>
