@@ -24,6 +24,10 @@ const TestScreen: React.FC<Props> = () => {
     try {
       await removeToken();
       navigation.navigate("SignIn");
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'SignIn' }],
+      });
     } catch (error) {
       console.log(error);
     }

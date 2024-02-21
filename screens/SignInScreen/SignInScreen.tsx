@@ -54,7 +54,7 @@ const SignInScreen: React.FC = () => {
       const user = userCredential.user;
       console.log(user);
       await AsyncStorage.setItem("userToken", user?.uid);
-      navigation.navigate("Test");
+      navigation.navigate("BottomNavigator");
     } catch (error) {
       console.log(error);
     }
