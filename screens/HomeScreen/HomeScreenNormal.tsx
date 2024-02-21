@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { app } from '../../firebase/firebaseConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ActionSheetProvider, useActionSheet } from '@expo/react-native-action-sheet';
@@ -18,22 +18,40 @@ const HomeScreenNormal = () => {
     const [uploading, setUploading] = useState(false);
     const storage = getStorage(app);
 
-    const uploadFile = async (uri, name) => {
+    const uploadFile = async (uri, name, storage) => {
         const storageRef = ref(storage, `uploads/${name}`);
         const response = await fetch(uri);
         const blob = await response.blob();
-        const snapshot = await uploadBytes(storageRef, blob);
-        const downloadURL = await getDownloadURL(snapshot.ref);
-
-        try {
-            const existingFiles = await AsyncStorage.getItem('recentFiles');
-            const parsedFiles = existingFiles ? JSON.parse(existingFiles) : [];
-            const updatedFiles = [...parsedFiles, { name, url: downloadURL }];
-            await AsyncStorage.setItem('recentFiles', JSON.stringify(updatedFiles));
-            console.log('Datei wurde hochgeladen:', { name, url: downloadURL });
-        } catch (error) {
-            console.error('Fehler beim Speichern der Datei:', error);
-        }
+    
+        // Erstelle einen Upload-Task
+        const uploadTask = uploadBytesResumable(storageRef, blob);
+    
+        // Registriere drei Observer: 'state_changed', 'success' und 'error'
+        uploadTask.on('state_changed',
+            (snapshot) => {
+                // Überwache den Fortschritt des Uploads
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload ist ' + progress + '% fertig');
+            },
+            (error) => {
+                // Behandle mögliche Fehler
+                console.error('Fehler beim Upload:', error);
+            },
+            () => {
+                // Upload erfolgreich abgeschlossen
+                getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+                    try {
+                        const existingFiles = await AsyncStorage.getItem('recentFiles');
+                        const parsedFiles = existingFiles ? JSON.parse(existingFiles) : [];
+                        const updatedFiles = [...parsedFiles, { name, url: downloadURL }];
+                        await AsyncStorage.setItem('recentFiles', JSON.stringify(updatedFiles));
+                        console.log('Datei wurde hochgeladen:', { name, url: downloadURL });
+                    } catch (error) {
+                        console.error('Fehler beim Speichern der Dateiinformationen:', error);
+                    }
+                });
+            }
+        );
     };
 
     const handleDocumentSelection = async () => {
@@ -41,11 +59,12 @@ const HomeScreenNormal = () => {
             type: "*/*",
             copyToCacheDirectory: true
         });
-
+    
         if (!result.canceled && result.assets && result.assets.length > 0) {
             const { uri, name } = result.assets[0];
             setUploading(true);
-            await uploadFile(uri, name);
+            // Rufe die angepasste uploadFile-Methode auf und übergebe das storage-Objekt
+            await uploadFile(uri, name, storage);
             setUploading(false);
         }
     };
@@ -61,7 +80,7 @@ const HomeScreenNormal = () => {
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsMultipleSelection: true,
             allowsEditing: false,
-            quality: 1,
+            quality: 0,
         });
 
         try {
@@ -70,7 +89,7 @@ const HomeScreenNormal = () => {
         
                 for (const asset of result.assets) {
                     const { uri, fileName } = asset;
-                    await uploadFile(uri, fileName);
+                    await uploadFile(uri, fileName, storage);
                 }
         
                 setUploading(false);
@@ -79,7 +98,7 @@ const HomeScreenNormal = () => {
     };
 
     const showPickerOptions = () => {
-        const options = ['Bild / Video hochladen', 'Datei hochladen', 'Abbrechen'];
+        const options = ['Upload media', 'Upload files', 'Cancel'];
         const cancelButtonIndex = 2;
     
         showActionSheetWithOptions({
