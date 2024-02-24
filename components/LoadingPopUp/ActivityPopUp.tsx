@@ -4,7 +4,7 @@ import Spinner from './Spinner';
 
 const screenWidth = Dimensions.get('screen').width;
 
-const LoadingOverlay = ({ visible }) => {
+const LoadingOverlay = ({ visible, percent }) => {
   return (
     <Modal
       visible={visible}
@@ -13,8 +13,8 @@ const LoadingOverlay = ({ visible }) => {
     >
       <View style={styles.overlay}>
         <View style={styles.loadingContainer}>
-          <Spinner />
-          <Text style={{ color: '#242424', fontSize: 16 }}>Ausgewählte Datei wird hochgeladen</Text>
+          <Spinner percent={percent}/>
+          {/* <Text style={{ color: '#242424', fontSize: 16 }}>Zu {percent}% hochgeladen</Text> */}
         </View>
       </View>
     </Modal>
@@ -30,8 +30,9 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     alignItems: 'center',
+    justifyContent: 'center',
     flexDirection: 'row',
-    width: screenWidth - 68,
+    width: 100,
     padding: 12,
     backgroundColor: 'white', // Sie können die Farben entsprechend anpassen
     borderRadius: 8,

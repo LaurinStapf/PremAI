@@ -16,7 +16,10 @@ import LoadingPopUp from '../../components/LoadingPopUp/ActivityPopUp'; // Erset
 const HomeScreenNormal = () => {
     const { showActionSheetWithOptions } = useActionSheet();
     const [uploading, setUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
     const storage = getStorage(app);
+
+    let percent: number = 0;
 
     const uploadFile = async (uri, name, storage) => {
         const storageRef = ref(storage, `uploads/${name}`);
@@ -32,6 +35,7 @@ const HomeScreenNormal = () => {
                 // Überwache den Fortschritt des Uploads
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 console.log('Upload ist ' + progress + '% fertig');
+                setUploadProgress(Math.round(progress));
             },
             (error) => {
                 // Behandle mögliche Fehler
@@ -46,6 +50,9 @@ const HomeScreenNormal = () => {
                         const updatedFiles = [...parsedFiles, { name, url: downloadURL }];
                         await AsyncStorage.setItem('recentFiles', JSON.stringify(updatedFiles));
                         console.log('Datei wurde hochgeladen:', { name, url: downloadURL });
+                        setTimeout(() => {
+                            setUploading(false);
+                          }, 1000);
                     } catch (error) {
                         console.error('Fehler beim Speichern der Dateiinformationen:', error);
                     }
@@ -65,7 +72,6 @@ const HomeScreenNormal = () => {
             setUploading(true);
             // Rufe die angepasste uploadFile-Methode auf und übergebe das storage-Objekt
             await uploadFile(uri, name, storage);
-            setUploading(false);
         }
     };
 
@@ -91,8 +97,6 @@ const HomeScreenNormal = () => {
                     const { uri, fileName } = asset;
                     await uploadFile(uri, fileName, storage);
                 }
-        
-                setUploading(false);
             }
         } catch (error) {console.error('Fehler beim Hochladen der Datei:', error);}
     };
@@ -137,7 +141,7 @@ const HomeScreenNormal = () => {
                 </View>
                 {/* Lade-Popup anzeigen, wenn uploading true ist */}
                 {uploading && (
-                    <LoadingPopUp visible={uploading} />
+                    <LoadingPopUp visible={uploading} percent={uploadProgress}/>
                 )}
             </View>
             <FAB title='Datei hochladen' iconName='ArrowUpload24Regular' onPress={showPickerOptions} />

@@ -1,32 +1,61 @@
-import React, { useEffect, useRef } from 'react';
-import { Animated, Easing, View, StyleSheet } from 'react-native';
+import React, { useRef, useEffect } from 'react';
+import { Animated, View, Text, StyleSheet } from 'react-native';
+import Svg, { Circle } from 'react-native-svg';
 
-const Loader02 = () => {
-  const rotation = useRef(new Animated.Value(0)).current;  // Initial value for rotation: 0
+const CircularProgress = ({ percent }) => {
+  // Verwenden Sie useRef, um die Animated.Value über Rerenders hinweg beizubehalten
+  const animation = useRef(new Animated.Value(0)).current;
 
-  // Run the rotation animation
+  // Erstellen Sie den animierten Kreis außerhalb des Renders, um unnötige Re-Definitionen zu vermeiden
+  const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+
+  const circleRadius = 30; // Radius des Kreises
+  const circumference = 2 * Math.PI * circleRadius;
+  const strokeWidth = 5; // Die Breite der Linie des Kreises
+
   useEffect(() => {
-    Animated.loop(
-      Animated.timing(rotation, {
-        toValue: 1,        // Rotate to 360 degrees represented by '1'
-        duration: 1000,    // One full rotation in one second
-        easing: Easing.linear,
-        useNativeDriver: true,  // Use native driver for better performance
-      })
-    ).start();
-  }, [rotation]);
+    Animated.timing(animation, {
+      toValue: percent,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [percent, animation]);
 
-  // Map the rotation value to a degree for the rotate animation
-  const spin = rotation.interpolate({
-    inputRange: [0, 1],   // Input range from 0 to 1
-    outputRange: ['0deg', '360deg'],  // Rotation from 0 to 360 degrees
+  const strokeDashoffset = animation.interpolate({
+    inputRange: [0, 100],
+    outputRange: [circumference, 0],
+    extrapolate: 'clamp',
   });
+
+  // Stellen Sie sicher, dass das SVG-Element genügend Platz bietet, indem Sie den Durchmesser plus die Strichstärke berechnen
+  const svgDiameter = (circleRadius + strokeWidth) * 2;
 
   return (
     <View style={styles.container}>
-      <Animated.View
-        style={[styles.loader02, { transform: [{ rotateZ: spin }] }]}
-      />
+      <Svg width={svgDiameter} height={svgDiameter}>
+        <Circle
+          stroke="#e6e7e8"
+          fill="none"
+          cx={circleRadius + strokeWidth}
+          cy={circleRadius + strokeWidth}
+          r={circleRadius}
+          {...{ strokeWidth, strokeDasharray: circumference }}
+        />
+        <AnimatedCircle
+          stroke="#1868F1"
+          fill="none"
+          cx={circleRadius + strokeWidth}
+          cy={circleRadius + strokeWidth}
+          r={circleRadius}
+          strokeDashoffset={strokeDashoffset}
+          {...{
+            strokeWidth,
+            strokeDasharray: circumference,
+            strokeLinecap: 'round',
+          }}
+        />
+      </Svg>
+      <Text style={styles.text}>{`${Math.round(percent)}%`}</Text>
     </View>
   );
 };
@@ -35,21 +64,13 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
+    padding: 8,
   },
-  loader02: {
-    width: 25,
-    height: 25,
-    borderTopWidth: 3,
-    borderRightWidth: 3,
-    borderBottomWidth: 3,
-    borderLeftWidth: 3,
-    borderTopColor: '#1868F1',
-    borderRightColor: '#BDD3FB',
-    borderBottomColor: '#BDD3FB',
-    borderLeftColor: '#BDD3FB',
-    borderRadius: 28,  // Half of width/height to make it circular
+  text: {
+    position: 'absolute',
+    fontSize: 15,
+    marginTop: -10,
   },
 });
 
-export default Loader02;
+export default CircularProgress;
