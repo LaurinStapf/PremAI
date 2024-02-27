@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text} from "react-native";
 import { removeToken } from "../../utils/asyncStorage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -7,6 +7,7 @@ import {
 } from "@react-navigation/stack";
 import { RootStackParamList } from "../../navigation/StackNavigator";
 import { useNavigation } from "@react-navigation/native";
+import Button from "../../components/Button";
 
 type TestScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -35,8 +36,7 @@ const TestScreen: React.FC<Props> = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Text>Test Screen</Text>
-      <Button title="Log Out" onPress={logout} />
+      <Button title="Log Out" onPress={logout} style={{ alignSelf: "center", marginTop: 20 }}/>
     </View>
   );
 };

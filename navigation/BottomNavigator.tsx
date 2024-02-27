@@ -97,11 +97,11 @@ const BottomNavigator: React.FC = () => {
         }}
       />
       <Tab.Screen
-        name="Test"
+        name="Settings"
         component={TestScreen}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Icon name="Beaker24Filled" color={focused ? "#1868F1" : "gray"} />
+            <Icon name="Settings24Filled" color={focused ? "#1868F1" : "gray"} />
           ),
           tabBarActiveTintColor: "#1868F1",
         }}
