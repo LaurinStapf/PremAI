@@ -9,12 +9,14 @@ type CardSize = 'small' | 'medium' | 'large'; // Add all possible size strings i
 
 // Define the props for your Card component
 interface CardProps {
+  descriptionStyle?: ViewStyle;
+  cardHeader?: ReactNode;
   size?: CardSize;
   iconName?: keyof typeof Icons | null; // Use 'keyof typeof Icons' to get the icon names from the Icons object
   iconSize?: number;
   iconColor?: string;
   style?: ViewStyle;
-  title: string;
+  title?: string;
   description?: string;
   children?: ReactNode;
   [key: string]: any; // For the rest of the props using the spread operator
@@ -29,6 +31,8 @@ const Card: React.FC<CardProps> = ({
   title,
   description,
   children,
+  cardHeader,
+  descriptionStyle,
   ...props
 }) => {
 
@@ -51,6 +55,7 @@ const Card: React.FC<CardProps> = ({
       <View style={styles.contentContainer}>
         {renderIcon()}
         <View>
+          {cardHeader}
           <Text style={styles.text}>{title}</Text>
           {description && <Text style={styles.description}>{description}</Text>}
           {children}
@@ -84,7 +89,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: '#242424',
-        fontSize: 15
+        fontSize: 15,
     },
     description: {
         // color: 'black',

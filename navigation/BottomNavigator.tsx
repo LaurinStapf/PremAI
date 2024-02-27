@@ -7,6 +7,7 @@ import { Headline } from "react-native-paper";
 // Screens
 import HomeScreenEmpty from "../screens/HomeScreen/HomeScreenEmpty";
 import TestScreen from "../screens/TestScreen/TestScreen";
+import FilesScreen from "../screens/FilesScreen/FilesScreen";
 
 // Searchbar
 import { SearchBar } from '@rneui/themed';
@@ -59,10 +60,28 @@ const BottomNavigator: React.FC = () => {
       />
       <Tab.Screen
         name="Files"
-        component={HomeScreenEmpty}
+        component={FilesScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon name="Folder24Filled" color={focused ? "#1868F1" : "gray"} />
+          ),
+          header: () => (
+            <SafeAreaView style={{backgroundColor: 'white'}}>
+              <Headline style={{ margin: 10, fontFamily: 'Lato_900Black', fontSize: 28 }}>Files</Headline>
+              {/* ToDO: Encapsulate */}
+              <SearchBar
+                placeholder="Search"
+                style={{ margin: 10 }}
+                value={search}
+                onChangeText={updateSearch}
+                onChange={() => {}}
+                searchIcon={<Icon name="Search20Filled" color="gray" onPress={onSearch}/>}
+                platform="ios"
+                inputContainerStyle={{ height: 20 }}
+                clearIcon={<Icon name="DismissCircle20Filled" color="gray" onPress={() => setSearch("") as void } />}
+              />
+              {/* End of encapsulation */}
+            </SafeAreaView>
           ),
           tabBarActiveTintColor: "#1868F1",
         }}

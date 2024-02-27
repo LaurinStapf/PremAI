@@ -1,32 +1,33 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Alert } from "react-native";
-import * as DocumentPicker from "expo-document-picker";
-import * as ImagePicker from "expo-image-picker";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Text, Alert } from "react-native";
+import FileList from "../../components/FileLists/FileList";
+import { getFilesFromFirebaseStorage } from "../HomeScreen/utils/fileHandler";
 import {
+  getDownloadURL,
   getStorage,
   ref,
   uploadBytesResumable,
-  getDownloadURL} from "firebase/storage";
-import { app } from "../../firebase/firebaseConfig";
+} from "firebase/storage";
+import { ScrollView } from "react-native-gesture-handler";
+import * as ImagePicker from "expo-image-picker";
+import * as DocumentPicker from "expo-document-picker";
+import { useActionSheet } from "@expo/react-native-action-sheet";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {
-  useActionSheet,
-} from "@expo/react-native-action-sheet";
-import { LinearProgress } from 'react-native-elements';
-
-import Card from "../../components/Card/Card";
-import RecentUsedFilesList from "../../components/FileLists/RecentUsedFilesList";
+// Components
 import FAB from "../../components/Buttons/FloatingActionButton";
-import LoadingPopUp from "../../components/LoadingPopUp/ActivityPopUp"; // Ersetzen Sie dies durch Ihren tatsächlichen LoadingPopUp-Importpfad
 
-const HomeScreenNormal = () => {
+interface FilesScreenProps {
+  // Hier können die Props für den Screen definiert werden
+}
+
+const FilesScreen: React.FC<FilesScreenProps> = () => {
+  // create a state variable for files
   const { showActionSheetWithOptions } = useActionSheet();
+  const [files, setFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [recentFiles, setRecentFiles] = useState([]);
-  const storage = getStorage(app);
-
-  let percent: number = 0;
+  const storage = getStorage();
 
   const uploadFile = async (uri, name, storage) => {
     const storageRef = ref(storage, `uploads/${name}`);
@@ -56,12 +57,12 @@ const HomeScreenNormal = () => {
           try {
             const existingFiles = await AsyncStorage.getItem("recentFiles");
             const parsedFiles = existingFiles ? JSON.parse(existingFiles) : [];
-            const updatedFiles = [...parsedFiles, { name, url: downloadURL, fileType:  name.split(".").pop() }];
+            const updatedFiles = [...parsedFiles, { name, url: downloadURL }];
             await AsyncStorage.setItem(
               "recentFiles",
               JSON.stringify(updatedFiles)
             );
-            console.log("Datei wurde hochgeladen:", { name, url: downloadURL, });
+            console.log("Datei wurde hochgeladen:", { name, url: downloadURL });
             setTimeout(() => {
               setUploading(false);
             }, 1000);
@@ -76,23 +77,7 @@ const HomeScreenNormal = () => {
     );
 
     // set recent files to pass state to the RecentUsedFilesList component
-    setRecentFiles([...recentFiles, { name, url: uploadTask.snapshot.ref, fileType: name.split(".").pop() }]);
-  };
-
-
-
-  const handleDocumentSelection = async () => {
-    const result = await DocumentPicker.getDocumentAsync({
-      type: "*/*",
-      copyToCacheDirectory: true,
-    });
-
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      const { uri, name } = result.assets[0];
-      setUploading(true);
-      // Rufe die angepasste uploadFile-Methode auf und übergebe das storage-Objekt
-      await uploadFile(uri, name, storage);
-    }
+    setFiles([...files, { name, url: uploadTask.snapshot.ref }]);
   };
 
   const handleImageSelection = async () => {
@@ -104,6 +89,8 @@ const HomeScreenNormal = () => {
       );
       return;
     }
+
+
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -123,6 +110,19 @@ const HomeScreenNormal = () => {
       }
     } catch (error) {
       console.error("Fehler beim Hochladen der Datei:", error);
+    }
+  };
+  const handleDocumentSelection = async () => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: "*/*",
+      copyToCacheDirectory: true,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      const { uri, name } = result.assets[0];
+      setUploading(true);
+      // Rufe die angepasste uploadFile-Methode auf und übergebe das storage-Objekt
+      await uploadFile(uri, name, storage);
     }
   };
 
@@ -151,51 +151,28 @@ const HomeScreenNormal = () => {
     );
   };
 
+  useEffect(() => {
+    getFilesFromFirebaseStorage(storage).then((files) => {
+      setFiles(files);
+    });
+  }, []);
 
   return (
-    <>
-      <View style={styles.container}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.title}>Speicherauslastung</Text>
-          <Card
-            cardHeader={<LinearProgress value={0.1} color="#1868F1" variant="determinate" style={{marginBottom: -5}} />}
-            description=" 1.2 GB von 15 GB belegt                              "
-            style={{ marginTop: 30, marginBottom: 16 }}
-            iconName="Storage24Regular"      
-          >
-
-         </Card>
-        </View>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.title}>Zuletzt genutzte Server</Text>
-          <Card
-            title="Prem.AI Cloud Server"
-            description="Firebase Storage"
-            style={{ marginTop: 30, marginBottom: 16 }}
-            iconName="BuildingCloud24Regular"
-          />
-          <Card
-            title="Servername XY"
-            description="192.168.178.1"
-            style={{ marginBottom: 16 }}
-            iconName="Server24Regular"
-          />
-        </View>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.title}>Zuletzt verwendete Dateien</Text>
-          <RecentUsedFilesList files={recentFiles} />
-        </View>
-        {/* Lade-Popup anzeigen, wenn uploading true ist */}
-        {uploading && (
-          <LoadingPopUp visible={uploading} percent={uploadProgress} />
-        )}
-      </View>
+    <View style={styles.container}>
+      <Text style={styles.title}>Dateien</Text>
+      <ScrollView>
+        <FileList files={[...files]} />
+       
+      </ScrollView>
       <FAB
         title="Datei hochladen"
         iconName="ArrowUpload24Regular"
-        onPress={showPickerOptions}
+        onPress={() => showPickerOptions()}
+        // make it stay on top
+        style={{ position: "absolute", margin: 0.5, right: -16, bottom:-0.3 }}
       />
-    </>
+    </View>
+    
   );
 };
 
@@ -203,19 +180,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    //justifyContent: "center",
-  },
-  contentContainer: {
-    marginTop: 30,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  sectionHeader: {
-    display: "flex",
-    paddingBottom: 8,
-    paddingLeft: 32,
-    paddingRight: 32,
-    flexShrink: 0,
+    paddingHorizontal: 16,
   },
   title: {
     color: "#242424",
@@ -223,12 +188,6 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "bold",
   },
-  loadingContainer: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
 });
 
-export default HomeScreenNormal;
+export default FilesScreen;
